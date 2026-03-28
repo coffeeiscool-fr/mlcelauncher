@@ -1,12 +1,6 @@
-# Minecraft LCE Launcher
+![Minecraft LCE Launcher!](public/images/legacy-edition.png)
 
-A modern, feature-rich launcher for Minecraft Legacy Edition with cross-platform support.
-
-## Features
-
-- *Runtime Detection*: Automatic Wine/Proton/Crossover detection for Linux
-- *Offline Mode*: Disable GitHub features when offline
--*Smart Updates*: Separate client and full update options
+A feature-rich launcher for Minecraft Legacy Edition with cross-platform support.
 
 Download the latest release from the [Releases page](https://github.com/coffeeiscool-frreleases).
 
