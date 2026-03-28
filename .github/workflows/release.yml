@@ -6,6 +6,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+# This block is CRITICAL for the automatic GITHUB_TOKEN to work
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -20,26 +24,30 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20' # Updated to 20 to avoid deprecation warnings
         cache: 'npm'
 
     - name: Install dependencies
       run: npm ci
 
-    - name: Build application
-      run: npm run build
-
+    # We add the GH_TOKEN here so electron-builder can publish the artifacts
     - name: Build and package (Windows)
       if: matrix.os == 'windows-latest'
       run: npm run dist:win
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and package (macOS)
       if: matrix.os == 'macos-latest'
       run: npm run dist:mac
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and package (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: npm run dist:linux
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -51,7 +59,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
